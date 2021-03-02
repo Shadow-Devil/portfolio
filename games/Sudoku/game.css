@@ -1,0 +1,108 @@
+:root{
+    --border3x3Color: #17B55C;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+button, h1 {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.sudoku-menu {
+    width: 50%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sudoku-menu button {
+    font-size: 24px;
+    margin: 10px;
+    padding: 5px;
+}
+
+#gameOverlay{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+#gameOverlay h1{
+    font-size: xxx-large;
+    position: fixed;
+    top:20%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 30px;
+    background: black;
+    color: white;
+    border-radius: 10px;
+}
+
+#gameOverlay button:nth-child(n){
+    position: relative;
+    top:50%;
+    left: 28%;
+    width: 15%;
+    padding: 20px 50px;
+    background: white;
+    font-size: large;
+}
+
+#gameContainer {
+    width:50%;
+    position: relative;
+    transform: translateX(50%);
+    display: grid;
+    grid-template: repeat(9, auto) / repeat(9, auto);
+    gap: 0;
+    border: 5px solid #666;
+    overflow: hidden;
+}
+
+#gameContainer .sudokuRow {
+}
+
+#gameContainer .sudokuRow .sudokuField:nth-child(3n):not(:last-child){
+    border-bottom: 2px var(--border3x3Color) solid;
+}
+
+#gameContainer .sudokuRow:nth-child(3n):not(:last-child){
+    border-right: 2px var(--border3x3Color) solid;
+}
+
+#gameContainer .sudokuRow .sudokuField {
+
+    /*height: 100%;*/
+    /*width: 100%;*/
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 1vw;
+    border: 1px #ccc solid;
+    background: transparent;
+
+}
+
+#gameContainer .sudoku-input-error {
+    background: #ffc9d7;
+}
+#gameContainer.valid-matrix {
+    border: 5px solid #7edb37;
+}
+
+
+.sudoku-section-one {
+    background: #ccc;
+}
