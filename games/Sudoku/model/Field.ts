@@ -31,7 +31,7 @@ export class FinalField extends Field {
 
     setInhalt(zahl: number) {
         // cant overwrite;
-        console.exception("Trying to Overwrite Constant Field");
+        console.error("Trying to Overwrite Constant Field");
     }
 
     isConstant() {
