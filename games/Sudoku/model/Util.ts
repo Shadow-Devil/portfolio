@@ -10,23 +10,22 @@ const randomInt = (max: number): number => Math.floor(Math.random() * max);
 
 export const emptySudoku = (): Field[][] => Array.from(new Array(9), () => new Array<Field>(9));
 
-
-const emptySudokuIntern = (): number[][] =>  Array.from(new Array(9), () => new Array<number>(9));
+const emptySudokuIntern = (): number[][] =>  Array.from(new Array(9), () => new Array<number>(9).fill(0));
 
 
 const isInDiff = (diff: Difficulty, x: number) => x >= diff.min && x <= diff.max;
 
 export function produceGameBoard(diff: Difficulty): Sudoku {
     const fullBoard = produceFullBoard();
-    let deleted: number;
-    let board: number[][];
+    let board = emptySudokuIntern();
+    let deleted = 0;
     do {
-        board = fullBoard.slice();
+        board = fullBoard.map((a) => a.slice());
         deleted = 0;
         let x   = 0;
         let y   = 0;
         let tmp = 0;
-        while (uniqueSolution(board) === 1) {
+        while (uniqueSolution(board)) {
             x = randomInt(9);
             y = randomInt(9);
             tmp = board[x][y];
@@ -44,15 +43,16 @@ export function produceGameBoard(diff: Difficulty): Sudoku {
 /**
  * Zufälliges Füllen mit Abfrage nach Regelverstoß
  */
-function produceFullBoard() {
+function produceFullBoard(): number[][] {
     let result = emptySudokuIntern();
     while (!isFullIntern(result)) {
         result = ((input: number[][]) => {
                     for (let x = 0; x < 9; x++) {
                         for (let y = 0; y < 9; y++) {
                             const r = 1 + randomInt(9);
-                            let runner = r;
                             input[x][y] = r;
+
+                            let runner = r;
                             while (!canPlaceIntern(input, x, y)) {
                                 runner = (runner % 9) + 1;
                                 input[x][y] = runner;
@@ -141,13 +141,13 @@ function canPlaceIntern(board: number[][], x: number, y: number): boolean {
                 return false;
             xtmp++;
         }
-        xtmp = x / 3 * 3;
+        xtmp = Math.floor(x / 3) * 3;
         ytmp++;
     }
     return true;
 }
 
-export const uniqueSolution = (board: number[][]): number => solve(0, 0, board);
+export const uniqueSolution = (board: number[][]): boolean => solve(0, 0, board) === 1;
 
 function solve(x: number, y: number, board: number[][]): number {
     let counter = 0;

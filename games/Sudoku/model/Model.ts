@@ -66,8 +66,8 @@ export default class Model {
         this.consumeBoard((x, y, field) => field.reset());
     }
 
-    setField(x: number, y: number, zahl: number) {
-        this.gameBoard[x][y].setInhalt(zahl);
+    setField(x: number, y: number, n: number) {
+        this.gameBoard[x][y].setInhalt(n);
     }
 
 

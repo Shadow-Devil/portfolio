@@ -26,7 +26,7 @@ export class Controller {
         this.timer = 0;
         this.startTimer();
         viewShowOverlay(false);
-        viewUpdate(this.model);
+        viewUpdate(this);
         // viewInit(this, this.model);
     }
 
@@ -80,7 +80,8 @@ export class Controller {
         this.startTime = Date.now();
     }
 
-    choseNumber(n: number) {
+    choseNumber(x: number, y: number, n: number) {
+        this.model.setField(x, y, n);
         //view.choseNumber(n);
         this.checkEnd();
     }
@@ -123,6 +124,14 @@ export class Controller {
 
     getTimer() {
         return this.timer;
+    }
+
+    getFieldContent(x: number, y: number) {
+        return this.model.getFieldContent(x, y);
+    }
+
+    isFieldConstant(x, y){
+        return this.model.isFieldConstant(x, y);
     }
 }
 

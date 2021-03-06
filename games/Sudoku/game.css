@@ -1,5 +1,5 @@
 :root{
-    --border3x3Color: #17B55C;
+    --border3x3Color: #454545;
 }
 
 body {
@@ -72,18 +72,18 @@ button, h1 {
     overflow: hidden;
 }
 
-#gameContainer .sudokuRow {
+#gameContainer .sudokuColumn {
 }
 
-#gameContainer .sudokuRow .sudokuField:nth-child(3n):not(:last-child){
+#gameContainer .sudokuColumn .sudokuField:nth-child(3n):not(:last-child){
     border-bottom: 2px var(--border3x3Color) solid;
 }
 
-#gameContainer .sudokuRow:nth-child(3n):not(:last-child){
+#gameContainer .sudokuColumn:nth-child(3n):not(:last-child){
     border-right: 2px var(--border3x3Color) solid;
 }
 
-#gameContainer .sudokuRow .sudokuField {
+#gameContainer .sudokuColumn .sudokuField {
 
     /*height: 100%;*/
     /*width: 100%;*/
@@ -92,7 +92,20 @@ button, h1 {
     padding: 1vw;
     border: 1px #ccc solid;
     background: transparent;
+}
 
+#gameContainer .sudokuColumn .sudokuField.constant {
+    background: #9b9b9b;
+    cursor: default;
+}
+
+#gameContainer .sudokuColumn .sudokuField.free {
+    background: #dddddd;
+    cursor: pointer;
+}
+
+#gameContainer .sudokuColumn .sudokuField.free:hover {
+    background: #7edb37;
 }
 
 #gameContainer .sudoku-input-error {
