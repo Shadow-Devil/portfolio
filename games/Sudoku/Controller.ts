@@ -5,10 +5,9 @@ import {Difficulty} from './model/Types.js';
 export class Controller {
 
     private gameRunning: boolean = false;
+    private readonly help: boolean = true;
 
     private timer: number = 0;
-
-
     private startTime: number = 0;
 
     private readonly model: Model;
@@ -93,6 +92,10 @@ export class Controller {
     choseNumber(x: number, y: number, n: number) {
         this.model.setField(x, y, n);
         //view.choseNumber(n);
+        if (this.help) {
+
+
+        }
         this.checkEnd();
     }
 
@@ -103,6 +106,7 @@ export class Controller {
 
         if (this.model.isFinished()) {
             this.stopTimer();
+            alert("YOU HAVE WON!" + this.timer);
             //view.showEndScreen(this.timer);
             return;
         }
