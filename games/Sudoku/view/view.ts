@@ -10,9 +10,9 @@ const pauseOverlay = document.getElementById("gamePauseOverlay");
 export function init(controller: Controller, model: Model) {
     buttonInit(controller);
 
-	for (let x = 0; x < 9; x++) {
-		gameContainer.appendChild(createSudokuRow(controller, model, x));
-	}
+    for (let x = 0; x < 9; x++) {
+        gameContainer.appendChild(createSudokuRow(controller, model, x));
+    }
 }
 
 function buttonInit(controller: Controller) {
@@ -44,30 +44,30 @@ function createSudokuRow(controller: Controller, model: Model, x: number) {
     return row;
 }
 
-function createSudokuField(controller: Controller, model: Model, x: number, y: number){
-	const field = document.createElement("div");
-	field.classList.add("sudokuField");
-	field.addEventListener("click", () => showInputNumbers(field, controller, x, y));
+function createSudokuField(controller: Controller, model: Model, x: number, y: number) {
+    const field = document.createElement("div");
+    field.classList.add("sudokuField");
+    field.addEventListener("click", () => showInputNumbers(field, controller, x, y));
 
-	const text = document.createTextNode(String(model.getFieldContent(x, y)));
-	field.appendChild(text);
+    const text = document.createTextNode(String(model.getFieldContent(x, y)));
+    field.appendChild(text);
 
-	return field;
+    return field;
 }
 
-export function showInputNumbers(field: HTMLDivElement, controller: Controller, x, y){
-	if (controller.isFieldConstant(x, y))
-		return;
+export function showInputNumbers(field: HTMLDivElement, controller: Controller, x, y) {
+    if (controller.isFieldConstant(x, y))
+        return;
 
-	const input: number = parseInt(prompt('Choose your number'), 10);
+    const input: number = parseInt(prompt('Choose your number'), 10);
 
-	if (isNaN(input) || input < 1 || input > 9){
-		alert("Wrong input!");
-		return;
-	}
+    if (isNaN(input) || input < 1 || input > 9) {
+        alert("Wrong input!");
+        return;
+    }
 
-	controller.choseNumber(x, y, input);
-	field.innerHTML = String(controller.getFieldContent(x, y));
+    controller.choseNumber(x, y, input);
+    field.innerHTML = String(controller.getFieldContent(x, y));
 }
 
 
