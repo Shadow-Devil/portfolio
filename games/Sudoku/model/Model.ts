@@ -61,8 +61,12 @@ export default class Model {
         }
     }
 
-    reset() {
+    clearInput() {
         this.consumeBoard((x, y, field) => field.reset());
+    }
+
+    clearBoard() {
+        this.gameBoard = Util.emptySudoku();
     }
 
     setField(x: number, y: number, n: number) {

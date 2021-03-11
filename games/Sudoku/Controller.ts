@@ -1,5 +1,5 @@
 import Model from './model/Model.js';
-import {viewInit, viewShowOverlay, viewUpdate} from './view/view.js';
+import * as View from './view/view.js';
 import {Difficulty} from './model/Types.js';
 
 export class Controller {
@@ -10,24 +10,24 @@ export class Controller {
 
 
     private startTime: number = 0;
+
     private readonly model: Model;
     private readonly sql: any;
 
     constructor() {
         this.model = new Model();
-        viewInit(this, this.model);
+        View.init(this, this.model);
         //this.sql = new SQL();
     }
 
     public start(diff: Difficulty) {
         console.log("Start")
         this.model.start(diff);
-        console.log("Finish")
+        console.log("Finish");
         this.timer = 0;
         this.startTimer();
-        viewShowOverlay(false);
-        viewUpdate(this);
-        // viewInit(this, this.model);
+        View.showStartOverlay(false);
+        View.updateSudoku(this);
     }
 
     load() {
@@ -59,9 +59,19 @@ export class Controller {
         this.sql.save(sb, this.timer);
     }
 
-    reset() {
-        this.model.reset();
-        //view.reset();
+    clearInput() {
+        this.model.clearInput();
+        View.updateSudoku(this);
+        View.showPauseOverlay(false);
+        this.timer = 0;
+        this.startTimer();
+    }
+
+    clearBoard() {
+        this.model.clearBoard();
+        View.updateSudoku(this);
+        View.showPauseOverlay(false);
+        View.showStartOverlay(true);
         this.timer = 0;
         this.startTimer();
     }

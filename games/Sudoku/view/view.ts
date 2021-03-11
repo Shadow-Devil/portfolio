@@ -1,28 +1,47 @@
 import Model from "../model/Model.js";
 import {Controller} from "../Controller.js";
 import {EASY, HARD, MEDIUM} from "../model/Types.js";
+import {EMPTY} from "../model/Util.js";
 
-export function viewInit(controller: Controller, model: Model){
-	const overlayChildren = document.getElementById("gameOverlay").children;
-	overlayChildren[1].addEventListener("click", () => controller.start(EASY), false);
-	overlayChildren[2].addEventListener("click", () => controller.start(MEDIUM), false);
-	overlayChildren[3].addEventListener("click", () => controller.start(HARD), false);
+const gameContainer = document.getElementById("gameContainer");
+const startOverlay = document.getElementById("gameStartOverlay");
+const pauseOverlay = document.getElementById("gamePauseOverlay");
 
-
-	const gameContainer = document.getElementById("gameContainer");
+export function init(controller: Controller, model: Model) {
+    buttonInit(controller);
 
 	for (let x = 0; x < 9; x++) {
 		gameContainer.appendChild(createSudokuRow(controller, model, x));
 	}
 }
 
-function createSudokuRow(controller: Controller, model: Model, x: number){
-	const row = document.createElement("div");
-	row.classList.add("sudokuColumn");
-	for (let y = 0; y < 9; y++) {
-		row.appendChild(createSudokuField(controller, model, x, y));
-	}
-	return row;
+function buttonInit(controller: Controller) {
+    const startOverlayButtons = startOverlay.children;
+    startOverlayButtons[1].addEventListener("click", () => controller.start(EASY), false);
+    startOverlayButtons[2].addEventListener("click", () => controller.start(MEDIUM), false);
+    startOverlayButtons[3].addEventListener("click", () => controller.start(HARD), false);
+
+    const pauseOverlayButtons = pauseOverlay.children;
+    pauseOverlayButtons[1].addEventListener("click", () => showPauseOverlay(false), false);
+    pauseOverlayButtons[2].addEventListener("click", () => controller.clearInput(), false);
+    pauseOverlayButtons[3].addEventListener("click", () => controller.clearBoard(), false);
+
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Escape' &&
+            startOverlay.hidden &&
+            pauseOverlay.hidden) {
+            showPauseOverlay(true);
+        }
+    });
+}
+
+function createSudokuRow(controller: Controller, model: Model, x: number) {
+    const row = document.createElement("div");
+    row.classList.add("sudokuColumn");
+    for (let y = 0; y < 9; y++) {
+        row.appendChild(createSudokuField(controller, model, x, y));
+    }
+    return row;
 }
 
 function createSudokuField(controller: Controller, model: Model, x: number, y: number){
@@ -51,19 +70,23 @@ export function showInputNumbers(field: HTMLDivElement, controller: Controller, 
 	field.innerHTML = String(controller.getFieldContent(x, y));
 }
 
-export function viewShowOverlay(show: boolean) {
-	document.getElementById("gameOverlay").hidden = !show;
+
+export function showStartOverlay(show: boolean) {
+    startOverlay.hidden = !show;
 }
 
-export function viewUpdate(controller: Controller) {
-	const gameContainer = document.getElementById("gameContainer");
+export function showPauseOverlay(show: boolean) {
+    pauseOverlay.hidden = !show;
+}
 
-	for (let y = 0; y < 9; y++) {
-		for (let x = 0; x < 9; x++) {
-			const field = gameContainer.children[x].children[y];
-			field.classList.add(controller.isFieldConstant(x, y) ? "constant" : "free");
-
-			field.innerHTML = String(controller.getFieldContent(x, y));
-		}
-	}
+export function updateSudoku(controller: Controller) {
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            const field = gameContainer.children[x].children[y];
+            field.classList.remove("constant", "free");
+            field.classList.add(controller.isFieldConstant(x, y) ? "constant" : "free");
+            const content = controller.getFieldContent(x, y);
+            field.innerHTML = content === EMPTY ? "\xa0" : String(content);
+        }
+    }
 }

@@ -5,16 +5,22 @@
   <title>Sudoku</title>
   <link rel="stylesheet" href="game.css">
 
-  <script type="module" src="Controller.js"></script>
+  <script type="module" src="Controller.js" defer></script>
 </head>
 <body>
-<div id="gameOverlay">
+<div class="overlay" id="gameStartOverlay" >
   <h1>Play Sudoku</h1>
   <button>Easy</button>
   <button>Medium</button>
   <button>Hard</button>
 </div>
+<div class="overlay" id="gamePauseOverlay" hidden>
+  <h1>Pausing Game</h1>
+  <button>Resume</button>
+  <button>Reset</button>
+  <button>Quit</button>
+</div>
 <h1>Sudoku</h1>
-<div id="gameContainer" hidden></div>
+<div id="gameContainer"></div>
 </body>
 </html>
