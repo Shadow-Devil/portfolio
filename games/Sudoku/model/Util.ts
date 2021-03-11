@@ -181,13 +181,10 @@ const isFullIntern = (board: number[][]) => andBoard(board, field => field !== E
 /**
  * Creates A new Sudoku with every Field copied.
  */
-function internToObject(from: number[][]): Field[][] {
-    const to = emptySudoku();
-    for (let x = 0; x < from.length; x++)
-        for (let y = 0; y < from[0].length; y++)
-            to[x][y] = from[x][y] === EMPTY ? new Field(from[x][y]) : new FinalField(from[x][y]);
-    return to;
-}
+export const internToObject =
+    (from: number[][]) => from.map((column) =>
+        column.map((field) =>
+            Field.of(field)));
 
 /**
  * Goes through the whole gameboard and checks if the Pradicate holds for every Field.

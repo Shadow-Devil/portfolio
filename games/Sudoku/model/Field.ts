@@ -22,6 +22,10 @@ export class Field {
     isConstant(): boolean{
         return false;
     }
+
+    static of(x: number){
+        return x === EMPTY ? new Field(x) : new FinalField(x);
+    }
 }
 
 export class FinalField extends Field {
