@@ -1,22 +1,23 @@
-export class Field {
-    private inhalt: number;
+import {EMPTY} from "./Util.js";
 
-    constructor (zahl: number = 0) {
-        this.inhalt = zahl;
+export class Field {
+    private content: number;
+
+    constructor (x: number = 0) {
+        this.content = x;
     }
 
     getContent (): number {
-        return this.inhalt;
+        return this.content;
     }
 
-    setInhalt (zahl: number) {
-        this.inhalt = zahl;
+    setInhalt (x: number) {
+        this.content = x;
     }
 
     reset () {
-        this.inhalt = 0;
+        this.content = 0;
     }
-
 
     isConstant(): boolean{
         return false;
@@ -25,11 +26,11 @@ export class Field {
 
 export class FinalField extends Field {
 
-    constructor(zahl: number) {
-        super(zahl);
+    constructor(x: number) {
+        super(x);
     }
 
-    setInhalt(zahl: number) {
+    setInhalt(x: number) {
         // cant overwrite;
         console.error("Trying to Overwrite Constant Field");
     }
@@ -39,7 +40,5 @@ export class FinalField extends Field {
     }
 
 
-    reset() {
-
-    }
+    reset() {}
 }
