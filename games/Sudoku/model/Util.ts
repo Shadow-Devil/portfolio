@@ -146,35 +146,28 @@ function canPlaceIntern(board: number[][], x: number, y: number): boolean {
     return true;
 }
 
-export const uniqueSolution = (board: number[][]): boolean => solve(0, 0, board) === 1;
+export const uniqueSolution = (board: number[][]): boolean => solve(board, 0, 0) === 1;
 
-function solve(x: number, y: number, board: number[][]): number {
+function solve(board: number[][], x: number, y: number): number {
     let counter = 0;
 
     if (board[x][y] === EMPTY) {
         for (let i = 1; i <= 9; i++) {
             board[x][y] = i;
-            if (canPlaceIntern(board, x, y)) {
-                if (x < 8) {
-                    counter += solve(x + 1, y, board);
-                } else if (y < 8) {
-                    counter += solve(0, y + 1, board);
-                } else {
-                    return 1;
-                }
-            }
+            if (canPlaceIntern(board, x, y))
+                counter += selectNext(board, x, y);
         }
         board[x][y] = EMPTY;
     } else {
-        if (x < 8) {
-            counter += solve(x + 1, y, board);
-        } else if (y < 8) {
-            counter += solve(0, y + 1, board);
-        } else {
-            return 1;
-        }
+        return counter + selectNext(board, x, y);
     }
     return counter;
+}
+
+const selectNext = (board, x, y) => {
+    if (x < 8) return solve(board, x + 1, y);
+    if (y < 8) return solve(board, 0, y + 1);
+    return 1;
 }
 
 /**
