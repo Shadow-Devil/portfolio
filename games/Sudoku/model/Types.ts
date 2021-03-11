@@ -1,7 +1,3 @@
-import {Field} from "./Field";
-
-export type Sudoku = Field[][];
-
 export type Difficulty = {readonly min: number, readonly max: number};
 
 class Dif {

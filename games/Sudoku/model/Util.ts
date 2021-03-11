@@ -1,7 +1,7 @@
 import {Field, FinalField} from "./Field.js";
 import {Difficulty, Sudoku} from "./Types.js";
 
-const EMPTY  = 0;
+export const EMPTY  = 0;
 
 /**
  * Generates a whole Number from 0 to max (exclusive)
@@ -12,10 +12,9 @@ export const emptySudoku = (): Field[][] => Array.from(new Array(9), () => new A
 
 const emptySudokuIntern = (): number[][] =>  Array.from(new Array(9), () => new Array<number>(9).fill(0));
 
-
 const isInDiff = (diff: Difficulty, x: number) => x >= diff.min && x <= diff.max;
 
-export function produceGameBoard(diff: Difficulty): Sudoku {
+export function produceGameBoard(diff: Difficulty): Field[][] {
     const fullBoard = produceFullBoard();
     let board = emptySudokuIntern();
     let deleted = 0;
@@ -181,29 +180,10 @@ function solve(x: number, y: number, board: number[][]): number {
 /**
  * Prüft alle 81 Felder nach Regelverstoß
  */
-export function isFinished(board: Sudoku): boolean {
-    for (let y = 0; y < 9; y++) {
-        for (let x = 0; x < 9; x++) {
-            if (!pruefeSpielzahl(board, x, y)) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
+export const isFinished = (board: Field[][]) => andBoard(board, (_, x, y) => pruefeSpielzahl(board, x, y));
+export const isFull = (board: Field[][]) => andBoard(board, field => field.getContent() !== EMPTY);
+const isFullIntern = (board: number[][]) => andBoard(board, field => field !== EMPTY);
 
-
-export const isFull = (board: Sudoku): boolean => andBoard(board, field => field.getContent() !== EMPTY);
-const isFullIntern = (board: number[][]): boolean => andBoardIntern(board, field => field !== EMPTY);
-
-export function setEmpty(board: Sudoku): Sudoku {
-    for (const row of board)
-        for (let y = 0; y < board[0].length; y++)
-            row[y] = new Field();
-
-
-    return board;
-}
 
 /**
  * Creates A new Sudoku with every Field copied.
@@ -219,22 +199,12 @@ function internToObject(from: number[][]): Field[][] {
 /**
  * Goes through the whole gameboard and checks if the Pradicate holds for every Field.
  *
- * @param board {[[Field]]}
+ * @param board
  * @param p {Function} The Pradicate to check for
  * @return True if all Fields return true on the Pradicate else false.
  */
-export function andBoard(board: Sudoku, p: (field: Field) => boolean) {
-    for (const column of board)
-        for (const field of column)
-            if (!p(field))
-                return false;
-    return true;
-}
-
-function andBoardIntern(board: number[][], p: (field: number) => boolean) {
-    for (const column of board)
-        for (const field of column)
-            if (!p(field))
-                return false;
-    return true;
-}
+export const andBoard = <T>
+    (board: T[][], p: (field: T, x: number, y: number) => boolean) =>
+        board.every((column, x) =>
+            column.every((field, y) =>
+                p(field, x, y)));

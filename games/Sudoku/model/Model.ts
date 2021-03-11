@@ -1,10 +1,9 @@
 import {Field, FinalField} from "./Field.js";
-import {Sudoku} from "./Types.js";
 import * as Util from "./Util.js";
 
 export default class Model {
 
-    private gameBoard: Sudoku;
+    private gameBoard: Field[][];
 
     /**
      * Erstelle ein leeres Sudokufeld
