@@ -10,7 +10,7 @@ export default class Model {
      * Füllen aller Felder mit 0
      */
     constructor() {
-        this.gameBoard = Util.setEmpty(Util.emptySudoku());
+        this.gameBoard = Util.emptySudoku();
     }
 
     /**

@@ -1,5 +1,5 @@
-import {Field, FinalField} from "./Field.js";
-import {Difficulty, Sudoku} from "./Types.js";
+import {Field} from "./Field.js";
+import {Difficulty} from "./Types.js";
 
 export const EMPTY  = 0;
 
@@ -8,9 +8,8 @@ export const EMPTY  = 0;
  */
 const randomInt = (max: number): number => Math.floor(Math.random() * max);
 
-export const emptySudoku = (): Field[][] => Array.from(new Array(9), () => new Array<Field>(9));
-
-const emptySudokuIntern = (): number[][] =>  Array.from(new Array(9), () => new Array<number>(9).fill(0));
+export const emptySudoku = (): Field[][] => Array.from(new Array(9), () => new Array<Field>(9).fill(new Field()));
+const emptySudokuIntern = (): number[][] => Array.from(new Array(9), () => new Array<number>(9).fill(0));
 
 const isInDiff = (diff: Difficulty, x: number) => x >= diff.min && x <= diff.max;
 
