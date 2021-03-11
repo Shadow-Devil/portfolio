@@ -23,7 +23,6 @@ export class Controller {
         console.log("Start")
         this.model.start(diff);
         console.log("Finish");
-        this.timer = 0;
         this.startTimer();
         View.showStartOverlay(false);
         View.updateSudoku(this);
@@ -36,8 +35,7 @@ export class Controller {
         }
 
         this.model.load(this.sql.getSudoku());
-        this.timer = this.sql.getSudokuTime();
-        this.startTimer();
+        this.startTimer(this.sql.getSudokuTime());
 
         this.sql.clearSudoku();
 
@@ -62,7 +60,6 @@ export class Controller {
         this.model.clearInput();
         View.updateSudoku(this);
         View.showPauseOverlay(false);
-        this.timer = 0;
         this.startTimer();
     }
 
@@ -71,7 +68,6 @@ export class Controller {
         View.updateSudoku(this);
         View.showPauseOverlay(false);
         View.showStartOverlay(true);
-        this.timer = 0;
         this.startTimer();
     }
 
@@ -84,7 +80,8 @@ export class Controller {
         this.startTime = 0;
     }
 
-    startTimer() {
+    startTimer(initial: number = 0) {
+        this.timer = initial;
         this.gameRunning = true;
         this.startTime = Date.now();
     }
@@ -128,8 +125,8 @@ export class Controller {
 
     highscoreinsert() {
         //if (view.getNameInput() === '') {
-            //view.writeHelpLabel('Bitte gebe einen Namen ein');
-            //return;
+        //view.writeHelpLabel('Bitte gebe einen Namen ein');
+        //return;
         //}
         //view.setUsername(view.getNameInput());
         //this.sql.insertHighscore(view.getNameInput(), this.timer);
@@ -144,7 +141,7 @@ export class Controller {
         return this.model.getFieldContent(x, y);
     }
 
-    isFieldConstant(x, y){
+    isFieldConstant(x, y) {
         return this.model.isFieldConstant(x, y);
     }
 }
