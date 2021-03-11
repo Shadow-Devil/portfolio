@@ -12,13 +12,14 @@ export const emptySudoku = (): Field[][] => Array.from(new Array(9), () => new A
 const emptySudokuIntern = (): number[][] => Array.from(new Array(9), () => new Array<number>(9).fill(0));
 
 const isInDiff = (diff: Difficulty, x: number) => x >= diff.min && x <= diff.max;
+const copy = (board) => board.map((a) => a.slice());
 
 export function produceGameBoard(diff: Difficulty): Field[][] {
     const fullBoard = produceFullBoard();
     let board = emptySudokuIntern();
     let deleted = 0;
     do {
-        board = fullBoard.map((a) => a.slice());
+        board = copy(fullBoard);
         deleted = 0;
         let x   = 0;
         let y   = 0;
