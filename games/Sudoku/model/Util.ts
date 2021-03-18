@@ -15,28 +15,33 @@ const isInDiff = (diff: Difficulty, x: number) => x >= diff.min && x <= diff.max
 const copy = (board) => board.map((a) => a.slice());
 
 export function produceGameBoard(diff: Difficulty): Field[][] {
-    const fullBoard = produceFullBoard();
-    let board = emptySudokuIntern();
-    let deleted = 0;
-    do {
-        board = copy(fullBoard);
-        deleted = 0;
-        let x   = 0;
-        let y   = 0;
-        let tmp = 0;
-        while (uniqueSolution(board)) {
-            x = randomInt(9);
-            y = randomInt(9);
-            tmp = board[x][y];
-            if (tmp !== EMPTY) {
-                board[x][y] = EMPTY;
-                deleted++;
+    while (true) {
+        let counter = 0;
+        const fullBoard = produceFullBoard();
+        let board = emptySudokuIntern();
+        let deleted = 0;
+        do {
+            board = copy(fullBoard);
+            deleted = 0;
+            let x = 0;
+            let y = 0;
+            let tmp = 0;
+            while (uniqueSolution(board)) {
+                x = randomInt(9);
+                y = randomInt(9);
+                tmp = board[x][y];
+                if (tmp !== EMPTY) {
+                    board[x][y] = EMPTY;
+                    deleted++;
+                }
             }
-        }
-        board[x][y] = tmp;
-    } while (!isInDiff(diff, deleted));
-
-    return internToObject(board);
+            board[x][y] = tmp;
+            counter++;
+        } while (!isInDiff(diff, deleted) && counter < 40);
+        console.debug(diff.min, deleted, diff.max);
+        if (isInDiff(diff, deleted))
+            return internToObject(board);
+    }
 }
 
 /**
