@@ -89,7 +89,7 @@ export class Controller {
     choseNumber(x: number, y: number, n: number) {
         this.model.setField(x, y, n);
         //view.choseNumber(n);
-        if (this.help) {
+        if (this.help && !this.model.pruefeSpielzahl(x, y)) {
 
 
         }

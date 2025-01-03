@@ -38,7 +38,7 @@ export function produceGameBoard(diff: Difficulty): Field[][] {
             board[x][y] = tmp;
             counter++;
         } while (!isInDiff(diff, deleted) && counter < 40);
-        console.debug(diff.min, deleted, diff.max);
+
         if (isInDiff(diff, deleted))
             return internToObject(board);
     }

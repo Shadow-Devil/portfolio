@@ -59,14 +59,17 @@ export function showInputNumbers(field: HTMLDivElement, controller: Controller, 
     if (controller.isFieldConstant(x, y))
         return;
 
-    const input: number = parseInt(prompt('Choose your number'), 10);
+    const input: string = prompt('Choose your number');
+    if (input === null)
+        return;
 
-    if (isNaN(input) || input < 1 || input > 9) {
+    const inputParsed = parseInt(input, 10);
+    if (isNaN(inputParsed) || inputParsed < 1 || inputParsed > 9) {
         alert("Wrong input!");
         return;
     }
 
-    controller.choseNumber(x, y, input);
+    controller.choseNumber(x, y, inputParsed);
     field.innerHTML = String(controller.getFieldContent(x, y));
 }
 
