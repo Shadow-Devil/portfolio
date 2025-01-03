@@ -1,5 +1,6 @@
 import {Field, FinalField} from "./Field.js";
 import * as Util from "./Util.js";
+import {Difficulty} from "./Types";
 
 export default class Model {
 
@@ -17,7 +18,7 @@ export default class Model {
      * Creates a Sudoku with the Types
      * @param diff Die Schwierigkeit
      */
-    start(diff) {
+    start(diff: Difficulty) {
         this.gameBoard = Util.produceGameBoard(diff);
     }
 

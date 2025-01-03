@@ -3,7 +3,7 @@ export type Difficulty = {readonly min: number, readonly max: number};
 class Dif {
     public readonly min: number;
     public readonly max: number;
-    constructor (min, max) {
+    constructor (min: number, max: number) {
         this.min = min;
         this.max = max;
     }
