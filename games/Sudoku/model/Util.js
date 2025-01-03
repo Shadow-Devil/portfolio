@@ -1,0 +1,170 @@
+import { Field } from "./Field.js";
+export const EMPTY = 0;
+/**
+ * Generates a whole Number from 0 to max (exclusive)
+ */
+const randomInt = (max) => Math.floor(Math.random() * max);
+export const emptySudoku = () => Array.from(new Array(9), () => new Array(9).fill(new Field()));
+const emptySudokuIntern = () => Array.from(new Array(9), () => new Array(9).fill(0));
+const isInDiff = (diff, x) => x >= diff.min && x <= diff.max;
+const copy = (board) => board.map((a) => a.slice());
+export function produceGameBoard(diff) {
+    while (true) {
+        let counter = 0;
+        const fullBoard = produceFullBoard();
+        let board = emptySudokuIntern();
+        let deleted = 0;
+        do {
+            board = copy(fullBoard);
+            deleted = 0;
+            let x = 0;
+            let y = 0;
+            let tmp = 0;
+            while (uniqueSolution(board)) {
+                x = randomInt(9);
+                y = randomInt(9);
+                tmp = board[x][y];
+                if (tmp !== EMPTY) {
+                    board[x][y] = EMPTY;
+                    deleted++;
+                }
+            }
+            board[x][y] = tmp;
+            counter++;
+        } while (!isInDiff(diff, deleted) && counter < 40);
+        if (isInDiff(diff, deleted))
+            return internToObject(board);
+    }
+}
+/**
+ * Zufälliges Füllen mit Abfrage nach Regelverstoß
+ */
+function produceFullBoard() {
+    let result = emptySudokuIntern();
+    while (!isFullIntern(result)) {
+        result = ((input) => {
+            for (let x = 0; x < 9; x++) {
+                for (let y = 0; y < 9; y++) {
+                    const r = 1 + randomInt(9);
+                    input[x][y] = r;
+                    let runner = r;
+                    while (!canPlaceIntern(input, x, y)) {
+                        runner = (runner % 9) + 1;
+                        input[x][y] = runner;
+                        // Spielfeld kann nicht gefüllt werden
+                        if (r === runner) {
+                            return emptySudokuIntern();
+                        }
+                    }
+                }
+            }
+            return input;
+        })(result);
+    }
+    return result;
+}
+/**
+ * Prüft eine Zahl nach Regelverstoß
+ */
+export function pruefeSpielzahl(board, x, y) {
+    const current = board[x][y].getContent();
+    // testen, ob Feld beschrieben
+    if (current === EMPTY)
+        return false;
+    // Zeilen und Spalten prüfen
+    for (let i = 0; i < 9; i++) {
+        // Zeilenabfrage
+        if (current === board[i][y].getContent() && x !== i)
+            return false;
+        // Spaltenabfrage
+        if (current === board[x][i].getContent() && y !== i)
+            return false;
+    }
+    let xtmp = Math.floor(x / 3) * 3; // Welches 3x3
+    let ytmp = Math.floor(y / 3) * 3;
+    const xmax = xtmp + 3;
+    const ymax = ytmp + 3;
+    while (ytmp < ymax) // im 3x3 Quadrat Regelverstoß
+     {
+        while (xtmp < xmax) {
+            if (current === board[xtmp][ytmp].getContent() && x !== xtmp && y !== ytmp)
+                return false;
+            xtmp++;
+        }
+        xtmp = x / 3 * 3;
+        ytmp++;
+    }
+    return true;
+}
+function canPlaceIntern(board, x, y) {
+    const current = board[x][y];
+    // testen, ob Feld beschrieben
+    if (current === EMPTY)
+        return false;
+    // Zeilen und Spalten prüfen
+    for (let i = 0; i < 9; i++) {
+        // Zeilenabfrage
+        if (current === board[i][y] && x !== i)
+            return false;
+        // Spaltenabfrage
+        if (current === board[x][i] && y !== i)
+            return false;
+    }
+    let xtmp = Math.floor(x / 3) * 3; // Welches 3x3
+    let ytmp = Math.floor(y / 3) * 3;
+    const xmax = xtmp + 3;
+    const ymax = ytmp + 3;
+    while (ytmp < ymax) // im 3x3 Quadrat Regelverstoß
+     {
+        while (xtmp < xmax) {
+            if (current === board[xtmp][ytmp] && x !== xtmp && y !== ytmp)
+                return false;
+            xtmp++;
+        }
+        xtmp = Math.floor(x / 3) * 3;
+        ytmp++;
+    }
+    return true;
+}
+export const uniqueSolution = (board) => solve(board, 0, 0) === 1;
+function solve(board, x, y) {
+    let counter = 0;
+    if (board[x][y] === EMPTY) {
+        for (let i = 1; i <= 9; i++) {
+            board[x][y] = i;
+            if (canPlaceIntern(board, x, y))
+                counter += selectNext(board, x, y);
+        }
+        board[x][y] = EMPTY;
+    }
+    else {
+        return counter + selectNext(board, x, y);
+    }
+    return counter;
+}
+const selectNext = (board, x, y) => {
+    if (x < 8)
+        return solve(board, x + 1, y);
+    if (y < 8)
+        return solve(board, 0, y + 1);
+    return 1;
+};
+/**
+ * Prüft alle 81 Felder nach Regelverstoß
+ */
+export const isFinished = (board) => andBoard(board, (_, x, y) => pruefeSpielzahl(board, x, y));
+export const isFull = (board) => andBoard(board, field => field.getContent() !== EMPTY);
+const isFullIntern = (board) => andBoard(board, field => field !== EMPTY);
+/**
+ * Creates A new Sudoku with every Field copied.
+ */
+export const internToObject = (from) => from.map((column) => column.map((field) => Field.of(field)));
+/**
+ * Goes through the whole gameboard and checks if the Pradicate holds for every Field.
+ *
+ * @param board
+ * @param p {Function} The Pradicate to check for
+ * @return True if all Fields return true on the Pradicate else false.
+ */
+export const andBoard = (board, p) => board.every((column, x) => column.every((field, y) => p(field, x, y)));
+//# sourceMappingURL=Util.js.map

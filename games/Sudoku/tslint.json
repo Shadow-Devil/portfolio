@@ -1,0 +1,11 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "no-trailing-whitespace": false,
+    "typedef": true,
+    "no-console": false,
+    "no-empty": false,
+    "comment-format": false,
+    "max-classes-per-file": false
+  }
+}

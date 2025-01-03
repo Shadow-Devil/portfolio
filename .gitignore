@@ -1,3 +1,2 @@
 /games/Sudoku/node_modules
-/games/Sudoku/*.json
-/games/Sudoku/*.js
+.idea
